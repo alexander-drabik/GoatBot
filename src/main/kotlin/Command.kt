@@ -45,7 +45,8 @@ object CommandExecutor {
                     command.executes(CommandInformation(this, command))
                 } else {
                     if (words.size-1 > command.argumentRange.last) {
-                        this.message.channel.createMessage("Niepoprawna ilość argumentów, komenda przyjmuje maks. " +
+                        this.message.channel.createMessage(
+                            "Niepoprawna ilość argumentów, komenda przyjmuje maks. " +
                                 command.argumentRange.last + when (command.argumentRange.last) {
                                     2, 3, 4 -> {
                                         " argumenty"
@@ -55,10 +56,19 @@ object CommandExecutor {
                                     }
                                     else -> {" argumentów"}
                                 }
-                            )
+                        )
                     } else {
-                        this.message.channel.createMessage("Niepoprawna ilość argumentów, komenda przyjmuje min. " +
-                                command.argumentRange.first + " argument"
+                        this.message.channel.createMessage(
+                            "Niepoprawna ilość argumentów, komenda przyjmuje min. " +
+                                    command.argumentRange.first + when (command.argumentRange.first) {
+                                2, 3, 4 -> {
+                                    " argumenty"
+                                }
+                                1 -> {
+                                    " argument"
+                                }
+                                else -> {" argumentów"}
+                            }
                         )
                     }
                 }
