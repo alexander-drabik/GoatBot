@@ -1,6 +1,13 @@
+import dao.Users
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class CommandInformation(val messageCreateEvent: MessageCreateEvent, val command: Command)
 
@@ -23,6 +30,26 @@ object CommandExecutor {
         kord.on<MessageCreateEvent> {
             // Do not respond to bots duh
             if (message.author?.isBot == true) return@on
+
+            // Increment message count
+            transaction {
+                val result = Users.select {
+                    Users.id eq message.author?.id.toString()
+                }
+                val user: ResultRow? = result.toList().firstOrNull()
+                if (user == null) {
+                    Users.insert {
+                        it[id] = message.author?.id.toString()
+                        it[numberOfMessages] = 0
+                    }
+                } else {
+                    Users.update({ Users.id eq message.author?.id.toString() }) {
+                        it[numberOfMessages] = user[Users.numberOfMessages]+1
+                    }
+                    println(user[Users.numberOfMessages]+1)
+                }
+
+            }
 
             var content = message.content
             if (content[0] == '!') {

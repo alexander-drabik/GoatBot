@@ -13,6 +13,9 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("dev.kord:kord-core:0.9.0")
+    implementation("org.jetbrains.exposed:exposed-core:0.41.1")
+    implementation("org.xerial:sqlite-jdbc:3.41.2.2")
+    runtimeOnly("org.jetbrains.exposed:exposed-jdbc:0.41.1")
 }
 
 tasks.test {
