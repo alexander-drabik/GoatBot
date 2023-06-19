@@ -42,3 +42,5 @@ bin/
 .DS_Store
 
 src/main/resources/token
+src/main/resources/gpt
+src/main/resources/weather
